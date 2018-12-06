@@ -1,0 +1,10 @@
+﻿<Application
+    x:Class="Binding.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Binding">
+    <Application.Resources>
+        <!--ObjectDataProvider-->
+        <local:DoubleToDoubleConverter x:Key="doubleConverter" WeitererParameter="10" />
+    </Application.Resources>
+</Application>

@@ -1,0 +1,30 @@
+﻿<Application
+    x:Class="Lokalisierung.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Lokalisierung">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--Hier externe Dictionaries importieren-->
+                <!--Uri-Schemes https://docs.microsoft.com/de-de/windows/uwp/app-resources/uri-schemes-->
+                <ResourceDictionary Source="Sprachen/German.xaml" />
+                <ResourceDictionary Source="Styles/Normal.xaml" />
+                <ResourceDictionary Source="ms-appx:///ExterneResourcen/Extern.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <x:String x:Key="fontFamily" >Arial</x:String>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <x:String x:Key="fontFamily" >Times New Roman</x:String>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            
+            <!--Lokale Resourcen-->
+
+            
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

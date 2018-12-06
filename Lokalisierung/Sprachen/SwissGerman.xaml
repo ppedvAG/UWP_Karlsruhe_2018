@@ -1,0 +1,8 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Lokalisierung">
+    <x:String x:Key="parking">Parkiere</x:String>
+    <x:String x:Key="bread">Brötli</x:String>
+    <x:String x:Key="language">Sprach</x:String>
+</ResourceDictionary>

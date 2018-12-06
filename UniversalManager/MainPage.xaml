@@ -1,0 +1,19 @@
+﻿<Page
+    x:Class="UniversalManager.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UniversalManager"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <NavigationView IsSettingsVisible="False">
+        <NavigationView.MenuItems>
+            <NavigationViewItem Tapped="NavigationViewItem_Tapped" Content="Todos" Tag="Todos" />
+            <NavigationViewItem Tapped="NavigationViewItem_Tapped" Content="Buchsuche" Tag="Books" />
+        </NavigationView.MenuItems>
+
+        <Frame x:Name="mainFrame" />
+    </NavigationView>
+</Page>

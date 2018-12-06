@@ -7,8 +7,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    <Grid>
-
+    <Grid x:Name="mainGrid" Background="Blue">
+        <Slider></Slider>
+        <Button  x:Name="button1" HorizontalAlignment="Center"  FontSize="20" Click="Hello_World_Button_Click">
+            <!--Content-Property-->
+            <TextBlock>sds</TextBlock>
+        </Button>
+        <Button Margin="5,50,10,10">Dummy</Button>
     </Grid>
 </Page>

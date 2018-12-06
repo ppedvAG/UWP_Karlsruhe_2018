@@ -1,0 +1,30 @@
+﻿<Page
+    x:Class="Binding.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Binding"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Name="page1"
+    Background="{ThemeResource ResourceKey=ApplicationPageBackgroundThemeBrush}">
+    <StackPanel x:Name="stackpanel1">
+        <!--Binding Source-->
+        <Slider x:Name="slider1" Value="50" />
+        <!--Binding Target-->
+        <TextBox x:Name="textbox1" Text="{Binding Value,ElementName=slider1,Mode=OneWay}"  />
+        <TextBox x:Name="textbox2" Text="{Binding Value,ElementName=slider1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  />
+        <TextBox MinWidth="0" x:Name="textbox3" Width="{Binding Value,ElementName=slider1,Mode=OneWay}" Text="{Binding Value,ElementName=slider1,Mode=TwoWay,UpdateSourceTrigger=Explicit}"  />
+        <Button FontSize="{Binding ActualWidth,ElementName=stackpanel1,Mode=OneWay,Converter={StaticResource doubleConverter},ConverterParameter='150'}" Click="Button_Click">Update Source</Button>
+        <Button>
+            <Button.FontSize>
+                <Binding ElementName="page1" Path="ActualWidth" Mode="OneWay">
+                    <Binding.Converter>
+                        <local:DoubleToDoubleConverter />
+                    </Binding.Converter>
+                </Binding>
+            </Button.FontSize>
+        </Button>
+        <TextBox x:Name="textbox4" Text="{x:Bind slider1.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+    </StackPanel>
+</Page>

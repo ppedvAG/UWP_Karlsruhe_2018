@@ -1,0 +1,38 @@
+﻿<Page
+    x:Class="Personenverwaltung.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Personenverwaltung"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <!--Property-Element-Syntax-->
+        <!--#region Row und Column Definitions-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="9*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*"    />
+        </Grid.ColumnDefinitions>
+        <!--#endregion-->
+
+        <!--Ab hier beginnt die Content-Property-->
+        <!--Attached Property-->
+        <Border Background="Green" Grid.ColumnSpan="2">
+            <Viewbox>
+                <TextBlock  TextAlignment="Center" FontSize="30" VerticalAlignment="Center" >
+                    <Bold>Personenverwaltung</Bold>
+                </TextBlock>
+            </Viewbox>
+        </Border>
+        <StackPanel Background="Aqua" Grid.Row="1">
+            <Button Margin="10" Click="Liste_Button_Click">Liste</Button>
+            <Button Margin="10 0 10 0" Click="Neu_Button_Click">Neu</Button>
+        </StackPanel>
+        <Frame x:Name="subFrame" Grid.Row="1" Grid.Column="1" SourcePageType="local:PersonCollectionPage" />
+    </Grid>
+</Page>

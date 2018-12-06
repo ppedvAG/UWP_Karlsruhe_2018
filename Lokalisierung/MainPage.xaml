@@ -1,0 +1,40 @@
+﻿<Page
+    x:Class="Lokalisierung.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Lokalisierung"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource AppBarToggleButtonCheckedPointerOverBorderThemeBrush}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <x:Double x:Key="pageFontSize">20</x:Double>
+    </Page.Resources>
+    
+    <RelativePanel>
+        <!--{} = Markup-Extension-->
+        <Button FontFamily="{ThemeResource fontFamily}" Background="Brown" ToolTipService.ToolTip="{StaticResource windowTitle}" FontSize="{StaticResource pageFontSize}" x:Name="buttonSprache" Content="{StaticResource language}">
+            <Button.Flyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Tag="Sprachen/German.xaml" Click="Language_Change_Click">Deutsch</MenuFlyoutItem>
+                    <MenuFlyoutItem Tag="Sprachen/SwissGerman.xaml" Click="Language_Change_Click">Schwizerdütsch</MenuFlyoutItem>
+                </MenuFlyout>
+            </Button.Flyout>
+        </Button>
+        <Button FontSize="{StaticResource pageFontSize}"  x:Name="themeButton"  Style="{StaticResource specialButton}"
+                RelativePanel.RightOf="buttonSprache" RelativePanel.Below="buttonSprache">
+            <Button.Flyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Tag="Styles/Normal.xaml" Text="Normal" Click="Style_Change_Click" />
+                    <MenuFlyoutItem Tag="Styles/Funky.xaml" Text="Funky" Click="Style_Change_Click" />
+                </MenuFlyout>
+            </Button.Flyout>
+            Theme</Button>
+        <TextBlock x:Name="tbParken" Text="{StaticResource bread}" RelativePanel.RightOf="themeButton" RelativePanel.Below="themeButton">
+            <TextBlock.FontSize>
+                <StaticResource ResourceKey="pageFontSize" />
+            </TextBlock.FontSize></TextBlock>
+        <TextBlock Text="{StaticResource parking}" x:Name="tbBroetchen" RelativePanel.AlignLeftWith="themeButton" RelativePanel.Below="tbParken" />
+        <Slider  RelativePanel.Below="tbBroetchen" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True" />
+    </RelativePanel>
+</Page>

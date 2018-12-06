@@ -1,0 +1,54 @@
+﻿<Page
+    x:Class="Personenverwaltung.PersonDetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Personenverwaltung"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled"
+    Background="Blue">
+    <Grid Margin="10">
+        <!--#region RowDefinitions-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <!--#endregion-->
+
+        <!--Children-->
+        <TextBlock VerticalAlignment="Center" Text="Name:" FontSize="14"  />
+        <TextBox x:Name="tbName" Grid.Column="1" Width="200" HorizontalAlignment="Left" VerticalAlignment="Center" />
+
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="Geburtsdatum:" FontSize="14" />
+        <DatePicker x:Name="datepickerGeburt" Grid.Row="1" Grid.Column="1" />
+
+        <TextBlock Grid.Row="2" VerticalAlignment="Center" Text="Größe:" FontSize="14" />
+        <Slider x:Name="sliderGroesse" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" StepFrequency="1" SnapsTo="StepValues" />
+
+        <TextBlock Grid.Row="3" VerticalAlignment="Center" Text="Sex:" FontSize="14" />
+        <ScrollViewer  Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <VariableSizedWrapGrid MaximumRowsOrColumns="3" Orientation="Horizontal">
+                <RadioButton Content="Male" Checked="RadioButton_Checked" IsChecked="True" />
+                <RadioButton Checked="RadioButton_Checked">Female</RadioButton>
+                <RadioButton Checked="RadioButton_Checked">Undefined</RadioButton>
+                <RadioButton Checked="RadioButton_Checked">Unknown</RadioButton>
+                <RadioButton Checked="RadioButton_Checked">Unclear</RadioButton>
+                <RadioButton Checked="RadioButton_Checked">Transgender</RadioButton>
+            </VariableSizedWrapGrid>
+        </ScrollViewer>
+
+        <TextBlock Grid.Row="4" VerticalAlignment="Center" Text="In der Probezeit:" FontSize="14" />
+        <ToggleSwitch x:Name="switchProbezeit"  Grid.Row="4" Grid.Column="1" OnContent="Ja" OffContent="Nein" />
+
+        <Button Grid.Row="5" Grid.Column="1" FontSize="10" HorizontalAlignment="Right" Background="Green" Click="Button_Click">Speichern</Button>
+    </Grid>
+</Page>
