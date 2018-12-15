@@ -1,0 +1,42 @@
+﻿<Page
+    x:Class="UniversalManager.Views.TodoItemsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UniversalManager.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:models="using:Entities.Models"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <toolkit:MasterDetailsView
+            ItemsSource="{x:Bind ViewModel.Todos,Mode=OneWay}"
+            >
+            <toolkit:MasterDetailsView.ItemTemplate>
+                <DataTemplate x:DataType="models:TodoItem">
+                    <StackPanel>
+                        <TextBlock Text="{x:Bind Title,Mode=OneWay}" />
+                        <TextBlock Text="{x:Bind TimeDue.ToShortDateString(),Mode=OneWay}" />
+                    </StackPanel>
+                </DataTemplate>
+            </toolkit:MasterDetailsView.ItemTemplate>
+            <toolkit:MasterDetailsView.DetailsTemplate>
+                <DataTemplate  x:DataType="models:TodoItem">
+                    <StackPanel>
+                        <TextBox Text="{x:Bind Title,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox Text="{x:Bind Description,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <DatePicker Date="{x:Bind TimeDue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource dateConverter}}" />
+                        <ToggleSwitch IsOn="{x:Bind Done,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" OnContent="Fertig" OffContent="Nicht fertig" />
+                    </StackPanel>
+                </DataTemplate>
+            </toolkit:MasterDetailsView.DetailsTemplate>
+            <toolkit:MasterDetailsView.MasterCommandBar>
+                <CommandBar>
+                    <AppBarButton Label="Hinzufügen" Content="Neues Todo" Icon="Add"  Command="{x:Bind ViewModel.CreateTodoCommand,Mode=OneWay}" >
+                    </AppBarButton>
+                </CommandBar>
+            </toolkit:MasterDetailsView.MasterCommandBar>
+        </toolkit:MasterDetailsView>
+    </Grid>
+</Page>

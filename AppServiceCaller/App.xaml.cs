@@ -1,19 +1,12 @@
-﻿using Entities.Helper;
-using Entities.Models;
-using Entities.ViewModels;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using UniversalManager.Implementations;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,7 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace UniversalManager
+namespace AppServiceCaller
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
@@ -35,15 +28,9 @@ namespace UniversalManager
         /// </summary>
         public App()
         {
-            NavigationHelper.RegisterService(new NavigationService());
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            
         }
-
-        public const string Local_Settings_Todo = "CurrentTodos";
-
-       
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -52,15 +39,6 @@ namespace UniversalManager
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            //Todos laden
-            if(ApplicationData.Current.LocalSettings.Values.TryGetValue(Local_Settings_Todo, out object json))
-            {
-                JsonSerializerSettings settings = new JsonSerializerSettings();
-                settings.TypeNameHandling = TypeNameHandling.Objects;
-                TodoItemsManager.TodoItems = JsonConvert.DeserializeObject<ObservableCollection<TodoItem>>(json.ToString(), settings);
-            }
-
-
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -88,10 +66,7 @@ namespace UniversalManager
                     // When the navigation stack isn't restored navigate to the first page,
                     // configuring the new page by passing required information as a navigation
                     // parameter
-                    NavigationService.Frame = rootFrame;
-                    NavigationHelper.Service.Navigate(Entities.Interfaces.NavigationTarget.Main, new MainViewModel());
-
-                    //rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();
@@ -120,19 +95,6 @@ namespace UniversalManager
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
-        }
-
-        protected override void OnActivated(IActivatedEventArgs args)
-        {
-     
-            if(args is ToastNotificationActivatedEventArgs toastargs)
-            {
-                string todoTitle = toastargs.Argument;
-
-                TodoViewModel model = new TodoViewModel(TodoItemsManager.TodoItems.FirstOrDefault(t => t.Title == todoTitle));
-                //NavigationHelper.Service.Navigate(Entities.Interfaces.NavigationTarget.TodoItems, model);
-            }
-            base.OnActivated(args);
         }
     }
 }

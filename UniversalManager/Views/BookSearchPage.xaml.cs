@@ -34,7 +34,22 @@ namespace UniversalManager.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             ViewModel = (BookSearchViewModel)e.Parameter;
+            if(ViewModel != null)
+                ViewModel.SearchTriggered += ViewModel_SearchTriggered;
+
             base.OnNavigatedTo(e);
+        }
+
+        protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            if (ViewModel != null)
+                ViewModel.SearchTriggered -= ViewModel_SearchTriggered;
+            base.OnNavigatingFrom(e);
+        }
+
+        private void ViewModel_SearchTriggered(object sender, EventArgs e)
+        {
+            pivot.SelectedIndex = 1;
         }
     }
 }

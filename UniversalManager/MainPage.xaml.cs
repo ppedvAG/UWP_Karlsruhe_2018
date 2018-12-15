@@ -1,13 +1,18 @@
 ﻿using Entities.Helper;
+using Entities.Models;
 using Entities.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using UniversalManager.Implementations;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,11 +32,40 @@ namespace UniversalManager
     {
         public MainViewModel ViewModel { get; set; }
 
+        public string FamilyName { get; set; }
+
         public MainPage()
         {
             this.InitializeComponent();
 
+            FamilyName = Package.Current.Id.FamilyName;
+
             NavigationService.Frame = mainFrame;
+            Application.Current.Suspending += Current_Suspending;
+        }
+
+        private void Current_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
+        {
+            //TodoItems speichern
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.Objects;
+            string json = JsonConvert.SerializeObject(TodoItemsManager.TodoItems);
+
+            if(ApplicationData.Current.LocalSettings.Values.ContainsKey(App.Local_Settings_Todo))
+            {
+                ApplicationData.Current.LocalSettings.Values[App.Local_Settings_Todo] = json;
+            }
+            else
+            {
+                  ApplicationData.Current.LocalSettings.Values.Add("CurrentTodos", json);
+            }
+           
+            //Wenn Current_Suspending fertig ist, wird das Programm beendet und Thread-Code wird nicht mehr zu Ende geführt
+            Task t = Task.Run(async () =>
+            {
+                var handle = await ApplicationData.Current.LocalFolder.CreateFileAsync("TOdos.json", CreationCollisionOption.ReplaceExisting);
+            });
+            Task.WaitAll(t);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

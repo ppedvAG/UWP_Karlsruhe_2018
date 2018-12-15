@@ -79,12 +79,5 @@ namespace Eigenes_UserControl
                 }
             }
         }
-
-       
-
-
-
-        //TODO: SelectionChanged-Event
-
     }
 }

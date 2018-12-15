@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -44,6 +45,8 @@ namespace Entities.Models
             set { SetValue(ref _coverURL, value); }
         }
 
+
+        [JsonConstructor]
         public Book(string title, string description, string[] authors, string iSBN, string coverURL)
         {
             Title = title;

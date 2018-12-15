@@ -7,13 +7,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <StackPanel>
+        <TextBox Text="{x:Bind FamilyName,Mode=OneWay}"></TextBox>
+        <NavigationView IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Tapped="NavigationViewItem_Tapped" Content="Todos" Tag="Todos" />
+                <NavigationViewItem Tapped="NavigationViewItem_Tapped" Content="Buchsuche" Tag="Books" />
+            </NavigationView.MenuItems>
 
-    <NavigationView IsSettingsVisible="False">
-        <NavigationView.MenuItems>
-            <NavigationViewItem Tapped="NavigationViewItem_Tapped" Content="Todos" Tag="Todos" />
-            <NavigationViewItem Tapped="NavigationViewItem_Tapped" Content="Buchsuche" Tag="Books" />
-        </NavigationView.MenuItems>
-
-        <Frame x:Name="mainFrame" />
-    </NavigationView>
+            <Frame x:Name="mainFrame" />
+        </NavigationView>
+    </StackPanel>
 </Page>

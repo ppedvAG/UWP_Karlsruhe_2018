@@ -20,13 +20,13 @@ namespace UniversalManager.Implementations
             switch (name)
             {
                 case NavigationTarget.BookSearch:
-                    Frame.Navigate(typeof(BookSearchPage), new BookSearchViewModel());
+                    Frame.Navigate(typeof(BookSearchPage), parameter);
                     break;
                 case NavigationTarget.TodoItems:
-                   
+                    Frame.Navigate(typeof(TodoItemsPage), parameter);
                     break;
                 case NavigationTarget.Main:
-                    Frame.Navigate(typeof(MainPage), new MainViewModel());
+                    Frame.Navigate(typeof(MainPage), parameter);
                     break;
                 default:
                     break;

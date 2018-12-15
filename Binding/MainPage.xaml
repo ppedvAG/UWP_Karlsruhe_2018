@@ -16,6 +16,10 @@
         <TextBox x:Name="textbox2" Text="{Binding Value,ElementName=slider1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  />
         <TextBox MinWidth="0" x:Name="textbox3" Width="{Binding Value,ElementName=slider1,Mode=OneWay}" Text="{Binding Value,ElementName=slider1,Mode=TwoWay,UpdateSourceTrigger=Explicit}"  />
         <Button FontSize="{Binding ActualWidth,ElementName=stackpanel1,Mode=OneWay,Converter={StaticResource doubleConverter},ConverterParameter='150'}" Click="Button_Click">Update Source</Button>
+        <!--
+        ActualWidth/ActualHeight können in UWP leider nicht fürs Binding verwendet werden:
+        https://docs.microsoft.com/en-us/uwp/api/windows.ui.xaml.frameworkelement.actualwidth
+        Empfohlen wird in solchen Szenarios mit dem SizeChanged-Event zu arbeiten. -->
         <Button>
             <Button.FontSize>
                 <Binding ElementName="page1" Path="ActualWidth" Mode="OneWay">

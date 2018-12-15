@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -44,5 +45,19 @@ namespace Entities.Models
             set { SetValue(ref _done, value); }
         }
 
+        public TodoItem()
+        {
+
+        }
+
+        [JsonConstructor]
+        public TodoItem(string title, string description, NotifyProperty<string> desc, DateTime timeDue, bool done)
+        {
+            Title = title;
+            Description = description;
+            Desc = desc;
+            TimeDue = timeDue;
+            Done = done;
+        }
     }
 }
