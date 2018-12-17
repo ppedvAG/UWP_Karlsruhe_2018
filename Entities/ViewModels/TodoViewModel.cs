@@ -10,8 +10,6 @@ namespace Entities.ViewModels
 {
     public class TodoViewModel : ModelBase
     {
-        public event EventHandler<TodoItem> NotificationRequested;
-
         public ObservableCollection<TodoItem> Todos => TodoItemsManager.TodoItems;
 
         public int Count => TodoItemsManager.TodoItems.Count;
@@ -43,7 +41,7 @@ namespace Entities.ViewModels
             base.OnPropertyChanged(nameof(Count));
             SelectedTodo = neuesTodo;
 
-            NotificationRequested?.Invoke(this, neuesTodo);
+            NotificationHelper.Service?.CreateNotification(neuesTodo);
         }
 
         public TodoViewModel()
@@ -52,11 +50,6 @@ namespace Entities.ViewModels
             {
                 CreateNewTodo($"Todo {Todos.Count + 1}", "...", DateTime.Now.AddSeconds(20));
             });
-        }
-
-        public void UpdateToastNotification()
-        {
-
         }
     }
 }

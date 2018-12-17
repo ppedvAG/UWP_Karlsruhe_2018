@@ -46,20 +46,8 @@ namespace UniversalManager
 
         private void Current_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
-            //TodoItems speichern
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.Objects;
-            string json = JsonConvert.SerializeObject(TodoItemsManager.TodoItems);
 
-            if(ApplicationData.Current.LocalSettings.Values.ContainsKey(App.Local_Settings_Todo))
-            {
-                ApplicationData.Current.LocalSettings.Values[App.Local_Settings_Todo] = json;
-            }
-            else
-            {
-                  ApplicationData.Current.LocalSettings.Values.Add(App.Local_Settings_Todo, json);
-                  ApplicationData.Current.LocalSettings.Values.Add(App.Last_Todo_ID, TodoItem.Last_TODO_ID);
-            }
+            ViewModel.SaveDataCommand.Execute(null);
            
             //Wenn Current_Suspending fertig ist, wird das Programm beendet und Thread-Code wird nicht mehr zu Ende geführt
             Task t = Task.Run(async () =>
