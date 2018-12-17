@@ -8,8 +8,17 @@ namespace Entities.Models
 {
     public class TodoItem : ModelBase, INotifyPropertyChanged
     {
-        private string _title;
+        public static int Last_TODO_ID = 0;
 
+        private int _id;
+        public int ID
+        {
+            get { return _id; }
+            set { SetValue(ref _id, value); }
+        }
+
+
+        private string _title;
         public string Title
         {
             get { return _title; }
@@ -19,14 +28,13 @@ namespace Entities.Models
         }
 
         private string _description;
-
         public string Description
         {
             get { return _description; }
             set { SetValue(ref _description, value); }
         }
 
-        public NotifyProperty<string> Desc { get; set; } = new NotifyProperty<string>(string.Empty);
+        // public NotifyProperty<string> Desc { get; set; } = new NotifyProperty<string>(string.Empty);
 
         private DateTime _timeDue;
         public DateTime TimeDue
@@ -38,7 +46,6 @@ namespace Entities.Models
         }
 
         private bool _done;
-
         public bool Done
         {
             get { return _done; }
@@ -51,13 +58,13 @@ namespace Entities.Models
         }
 
         [JsonConstructor]
-        public TodoItem(string title, string description, NotifyProperty<string> desc, DateTime timeDue, bool done)
+        public TodoItem(int id, string title, string description, DateTime? timeDue = null, bool done = false)
         {
             Title = title;
             Description = description;
-            Desc = desc;
-            TimeDue = timeDue;
+            TimeDue = timeDue == null ? DateTime.Now.AddDays(7) : timeDue.Value;
             Done = done;
+            ID = id;
         }
     }
 }

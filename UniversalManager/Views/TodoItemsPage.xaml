@@ -12,6 +12,7 @@
     <Grid>
         <toolkit:MasterDetailsView
             ItemsSource="{x:Bind ViewModel.Todos,Mode=OneWay}"
+            SelectedItem="{x:Bind ViewModel.SelectedTodo,Mode=TwoWay}"
             >
             <toolkit:MasterDetailsView.ItemTemplate>
                 <DataTemplate x:DataType="models:TodoItem">

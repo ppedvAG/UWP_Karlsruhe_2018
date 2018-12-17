@@ -57,13 +57,14 @@ namespace UniversalManager
             }
             else
             {
-                  ApplicationData.Current.LocalSettings.Values.Add("CurrentTodos", json);
+                  ApplicationData.Current.LocalSettings.Values.Add(App.Local_Settings_Todo, json);
+                  ApplicationData.Current.LocalSettings.Values.Add(App.Last_Todo_ID, TodoItem.Last_TODO_ID);
             }
            
             //Wenn Current_Suspending fertig ist, wird das Programm beendet und Thread-Code wird nicht mehr zu Ende geführt
             Task t = Task.Run(async () =>
             {
-                var handle = await ApplicationData.Current.LocalFolder.CreateFileAsync("TOdos.json", CreationCollisionOption.ReplaceExisting);
+                //var handle = await ApplicationData.Current.LocalFolder.CreateFileAsync("Todos.json", CreationCollisionOption.ReplaceExisting);
             });
             Task.WaitAll(t);
         }

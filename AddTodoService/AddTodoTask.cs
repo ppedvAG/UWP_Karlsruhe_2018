@@ -1,6 +1,7 @@
 ﻿//using Entities.Models;
 //using Newtonsoft.Json;
 using Entities.Models;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,18 +13,21 @@ using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI.Notifications;
 
 namespace AddTodoService
 {
+    //Damit der App-Service funktioniert, muss in der UniversalManager-App
+    //dieses Projekt referenziert werden und der Einstiegspunkt unter Properties->Manifest->Declarations definiert werden
     public sealed class AddTodoTask : IBackgroundTask
     {
         BackgroundTaskDeferral _deferral;
         AppServiceConnection appServiceconnection;
         const string Local_Settings_Todo = "CurrentTodos";
+        const string Last_Todo_ID = "LastTodoID";
 
         public void Run(IBackgroundTaskInstance taskInstance)
         {
-            //Take a service deferral so the service isn't terminated
             _deferral = taskInstance.GetDeferral();
 
             taskInstance.Canceled += OnTaskCanceled;
@@ -31,26 +35,11 @@ namespace AddTodoService
             var details = taskInstance.TriggerDetails as AppServiceTriggerDetails;
             appServiceconnection = details.AppServiceConnection;
 
-            //Listen for incoming app service requests
             appServiceconnection.RequestReceived += OnRequestReceived;
         }
 
         private async void OnRequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
         {
-            //var deferal = args.GetDeferral();
-
-            
-
-            //var result = new ValueSet();
-            ////result.Add("result", randomNumberGenerator.Next(minValue, maxValue));
-            //result.Add("result", 5);
-
-            ////Send the response
-            //await args.Request.SendResponseAsync(result);
-
-
-            //deferal?.Complete();
-
             var messageDeferral = args.GetDeferral();
 
             ValueSet message = args.Request.Message;
@@ -65,46 +54,94 @@ namespace AddTodoService
 
                     ObservableCollection<TodoItem> todos = new ObservableCollection<TodoItem>();
                     bool settingsCreated = false;
+                    int lastID = 0;
                     if (ApplicationData.Current.LocalSettings.Values.TryGetValue(Local_Settings_Todo, out object json))
                     {
                         JsonSerializerSettings settings = new JsonSerializerSettings();
                         settings.TypeNameHandling = TypeNameHandling.Objects;
                         todos = JsonConvert.DeserializeObject<ObservableCollection<TodoItem>>(json.ToString(), settings);
                         settingsCreated = true;
+                        if (ApplicationData.Current.LocalSettings.Values.TryGetValue(Last_Todo_ID, out object last))
+                        {
+                            lastID = (int)last;
+                        }
                     }
-                    todos.Add(new TodoItem(todoTitle, "...", new NotifyProperty<string>(".."), DateTime.Now.AddDays(7), false));
+                    lastID++;
+                    TodoItem newTodo = new TodoItem(lastID, todoTitle, "...");
+                    todos.Add(newTodo);
                     if (settingsCreated)
                     {
                         ApplicationData.Current.LocalSettings.Values[Local_Settings_Todo] = JsonConvert.SerializeObject(todos);
+                        ApplicationData.Current.LocalSettings.Values[Last_Todo_ID] = lastID;
                     }
                     else
                     {
                         ApplicationData.Current.LocalSettings.Values.Add(Local_Settings_Todo, JsonConvert.SerializeObject(todos));
+                        ApplicationData.Current.LocalSettings.Values.Add(Last_Todo_ID, lastID);
                     }
+
+                    //Nuget Packacke UWP.ToastNotification
+                    var content = new ToastContent()
+                    {
+                        // More about the Launch property at https://docs.microsoft.com/dotnet/api/microsoft.toolkit.uwp.notifications.toastcontent
+                        Launch = "ToastContentActivationParams",
+
+                        Visual = new ToastVisual()
+                        {
+                            BindingGeneric = new ToastBindingGeneric()
+                            {
+                                Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = "TODO wurde erstellt!"
+                            },
+
+                            new AdaptiveText()
+                            {
+                                 Text = $"{newTodo.Title}: {newTodo.Description}"
+                            }
+                        }
+                            }
+                        },
+
+                        Actions = new ToastActionsCustom()
+                        {
+                            Buttons =
+                            {
+                                // More about Toast Buttons at https://docs.microsoft.com/dotnet/api/microsoft.toolkit.uwp.notifications.toastbutton
+                                new ToastButton("Anzeigen", newTodo.ID.ToString())
+                                {
+                                    ActivationType = ToastActivationType.Foreground
+                                },
+
+                                new ToastButtonDismiss("Abbrechen")
+                            }
+                        }
+                    };
+
+                    var toast = new ToastNotification(content.GetXml());
+                    ToastNotificationManager.CreateToastNotifier().Show(toast);
                     returnData.Add("Status", "OK");
-                    await args.Request.SendResponseAsync(returnData); // Return the data to the caller.
+                    await args.Request.SendResponseAsync(returnData);
                 }
             }
             catch (Exception e)
             {
                 returnData.Add("Status", e.Message);
-                await args.Request.SendResponseAsync(returnData); // Return the data to the caller.
+                await args.Request.SendResponseAsync(returnData);
                 return;
             }
             finally
             {
-                // Complete the deferral so that the platform knows that we're done responding to the app service call.
-                // Note for error handling: this must be called even if SendResponseAsync() throws an exception.
                 messageDeferral?.Complete();
             }
         }
-
 
         private void OnTaskCanceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)
         {
             if (_deferral != null)
             {
-                //Complete the service deferral
                 _deferral.Complete();
                 _deferral = null;
             }

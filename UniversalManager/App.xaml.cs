@@ -42,8 +42,8 @@ namespace UniversalManager
         }
 
         public const string Local_Settings_Todo = "CurrentTodos";
+        public const string Last_Todo_ID = "LastTodoID";
 
-       
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -52,14 +52,22 @@ namespace UniversalManager
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            PrepareLaunch(e);
+        }
+
+        public void PrepareLaunch(LaunchActivatedEventArgs e = null)
+        {
             //Todos laden
-            if(ApplicationData.Current.LocalSettings.Values.TryGetValue(Local_Settings_Todo, out object json))
+            if (ApplicationData.Current.LocalSettings.Values.TryGetValue(Local_Settings_Todo, out object json))
             {
                 JsonSerializerSettings settings = new JsonSerializerSettings();
                 settings.TypeNameHandling = TypeNameHandling.Objects;
                 TodoItemsManager.TodoItems = JsonConvert.DeserializeObject<ObservableCollection<TodoItem>>(json.ToString(), settings);
             }
-
+            if (ApplicationData.Current.LocalSettings.Values.TryGetValue(Last_Todo_ID, out object lastID))
+            {
+                TodoItem.Last_TODO_ID = (int)lastID;
+            }
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -72,7 +80,7 @@ namespace UniversalManager
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+                if (e != null && e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
                 }
@@ -81,7 +89,7 @@ namespace UniversalManager
                 Window.Current.Content = rootFrame;
             }
 
-            if (e.PrelaunchActivated == false)
+            if (e == null || e.PrelaunchActivated == false)
             {
                 if (rootFrame.Content == null)
                 {
@@ -124,13 +132,12 @@ namespace UniversalManager
 
         protected override void OnActivated(IActivatedEventArgs args)
         {
-     
-            if(args is ToastNotificationActivatedEventArgs toastargs)
-            {
-                string todoTitle = toastargs.Argument;
+            PrepareLaunch();
 
-                TodoViewModel model = new TodoViewModel(TodoItemsManager.TodoItems.FirstOrDefault(t => t.Title == todoTitle));
-                //NavigationHelper.Service.Navigate(Entities.Interfaces.NavigationTarget.TodoItems, model);
+            if(args is ToastNotificationActivatedEventArgs toastargs && int.TryParse(toastargs.Argument, out int todoID))
+            {
+                TodoViewModel model = new TodoViewModel(TodoItemsManager.TodoItems.FirstOrDefault(t => t.ID == todoID));
+                NavigationHelper.Service.Navigate(Entities.Interfaces.NavigationTarget.TodoItems, model);
             }
             base.OnActivated(args);
         }

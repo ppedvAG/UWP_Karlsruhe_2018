@@ -50,8 +50,7 @@ namespace UniversalManager.Views
         {
             foreach (var item in ToastNotificationManager.CreateToastNotifier().GetScheduledToastNotifications())
             {
-                //TODO: Eindeutigen Hash erfinden!
-                if(item.Id == todo.Title)
+                if(item.Id == todo.ID.ToString())
                 {
                     ToastNotificationManager.CreateToastNotifier().RemoveFromSchedule(item);
                 }
@@ -86,7 +85,7 @@ namespace UniversalManager.Views
                     Buttons =
                     {
                         // More about Toast Buttons at https://docs.microsoft.com/dotnet/api/microsoft.toolkit.uwp.notifications.toastbutton
-                        new ToastButton("Anzeigen", todo.Title)
+                        new ToastButton("Anzeigen", todo.ID.ToString())
                         {
                             ActivationType = ToastActivationType.Foreground
                         },
@@ -97,7 +96,7 @@ namespace UniversalManager.Views
             };
 
             var toast = new ScheduledToastNotification(content.GetXml(), todo.TimeDue);
-            toast.Id = todo.Title;
+            toast.Id = todo.ID.ToString();
             ToastNotificationManager.CreateToastNotifier().AddToSchedule(toast);
         }
     }

@@ -18,9 +18,6 @@ using Windows.UI.Xaml.Navigation;
 
 namespace AppServiceCaller
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         public MainPage()
@@ -32,8 +29,8 @@ namespace AppServiceCaller
         {
             using (var connection = new AppServiceConnection())
             {
-                //Set up a new app service connection
                 connection.AppServiceName = "com.ppedv.todos";
+                //kann im UniversalManager-Projekt mittels "Package.Current.Id.FamilyName" ermittelt werden
                 connection.PackageFamilyName = "548799e1-66bf-474c-bb3a-c8a8e92c133f_effe681hq0sj4";
                 AppServiceConnectionStatus status = await connection.OpenAsync();
 
@@ -59,21 +56,17 @@ namespace AppServiceCaller
                         return;
                 }
 
-                //Set up the inputs and send a message to the service
                 var inputs = new ValueSet();
                 inputs.Add("Command", "Add Todo");
                 inputs.Add("Title", textboxTitle.Text);
                 AppServiceResponse response = await connection.SendMessageAsync(inputs);
 
-                //If the service responded with success display the result and walk away
                 if (response.Status == AppServiceResponseStatus.Success)
                 {
                     tbStatus.Items.Add("Hat geklappt!");
                     return;
                 }
 
-                //Something went wrong while sending a message. Let display
-                //a meaningful error message
                 switch (response.Status)
                 {
                     case AppServiceResponseStatus.Failure:

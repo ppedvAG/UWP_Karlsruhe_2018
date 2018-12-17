@@ -27,14 +27,7 @@ namespace Entities.ViewModels
 
         public TodoViewModel(Book book) : this()
         {
-            TodoItem neuesTodo = new TodoItem();
-            neuesTodo.Title = $"{book.Title} lesen!";
-            neuesTodo.Description = book.Description;
-            neuesTodo.TimeDue = DateTime.Now + TimeSpan.FromDays(10);
-            Todos.Add(neuesTodo);
-            SelectedTodo = neuesTodo;
-            //base.OnPropertyChanged(nameof(Todos));
-            //base.OnPropertyChanged(nameof(Count));
+            CreateNewTodo($"{book.Title} lesen!", book.Description, DateTime.Now + TimeSpan.FromDays(10));
         }
 
         public TodoViewModel(TodoItem item)
@@ -42,21 +35,22 @@ namespace Entities.ViewModels
             SelectedTodo = item;
         }
 
+        public void CreateNewTodo(string title, string description, DateTime timeDue)
+        {
+            TodoItem.Last_TODO_ID++;
+            TodoItem neuesTodo = new TodoItem(TodoItem.Last_TODO_ID, title, description, timeDue);
+            Todos.Add(neuesTodo);
+            base.OnPropertyChanged(nameof(Count));
+            SelectedTodo = neuesTodo;
+
+            NotificationRequested?.Invoke(this, neuesTodo);
+        }
+
         public TodoViewModel()
         {
-            //base.OnPropertyChanged(nameof(Todos));
-            //base.OnPropertyChanged(nameof(Count));
-
             CreateTodoCommand = new DelegateCommand(p =>
             {
-                TodoItem neuesTodo = new TodoItem();
-                neuesTodo.Title = $"Todo {Todos.Count + 1}";
-                neuesTodo.TimeDue = DateTime.Now.AddSeconds(20);
-                Todos.Add(neuesTodo);
-                SelectedTodo = neuesTodo;
-
-                NotificationRequested?.Invoke(this, neuesTodo);
-
+                CreateNewTodo($"Todo {Todos.Count + 1}", "...", DateTime.Now.AddSeconds(20));
             });
         }
 
