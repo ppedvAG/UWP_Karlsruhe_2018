@@ -10,12 +10,17 @@
     <Viewbox>
         <RelativePanel Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel x:Name="s1" Orientation="Horizontal">
-                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0">Name der Task:</TextBlock>
-                <TextBox x:Name="textboxTitle" VerticalAlignment="Center" Width="100" />
-                <ListBox x:Name="tbStatus"></ListBox>
+                <TextBlock VerticalAlignment="Center" Margin="0 0 10 0">Name des Todo:</TextBlock>
+                <TextBox x:Name="textboxTitle" VerticalAlignment="Center" Width="200" />
             </StackPanel>
-            <Button Click="Button_Click" 
-                RelativePanel.AlignHorizontalCenterWith="s1" Margin="5" RelativePanel.Below="s1" HorizontalAlignment="Center" Content="Create Task" />
+            <ListBox x:Name="tbStatus" RelativePanel.Below="s1">
+                <x:String>SDas</x:String>
+                <x:String>SDas</x:String>
+                <x:String>SDas</x:String>
+                <x:String>SDas</x:String>
+                <x:String>SDas</x:String>
+            </ListBox>
+            <Button Click="Button_Click" Margin="5" RelativePanel.Below="tbStatus" HorizontalAlignment="Center" Content="Neue Task erstellen" />
         </RelativePanel>
     </Viewbox>
 </Page>

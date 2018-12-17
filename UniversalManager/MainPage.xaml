@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <StackPanel>
+    <Grid>
         <TextBox Text="{x:Bind FamilyName,Mode=OneWay}"></TextBox>
         <NavigationView IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
             <NavigationView.MenuItems>
@@ -17,5 +17,5 @@
 
             <Frame x:Name="mainFrame" />
         </NavigationView>
-    </StackPanel>
+    </Grid>
 </Page>

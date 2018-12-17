@@ -6,5 +6,6 @@
     xmlns:local="using:UniversalManager">
     <Application.Resources>
         <helpers:DateTimeToDateTimeOffsetConverter x:Key="dateConverter" />
+        <helpers:StringToBoolConverter x:Key="stringEmpty" />
     </Application.Resources>
 </Application>

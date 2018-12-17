@@ -54,9 +54,9 @@ namespace UniversalManager
         {
             Frame rootFrame = Window.Current.Content as Frame;
             //Services registrieren
-            NotificationHelper.RegisterService(new NotificationService());
-            NavigationHelper.RegisterService(new NavigationService());
-            DataHelper.RegisterService(new DataService());
+            ServicesHelper.RegisterNotificationService(new NotificationService());
+            ServicesHelper.RegisterNavigationService(new NavigationService());
+            ServicesHelper.RegisterDataService(new DataService());
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -84,7 +84,7 @@ namespace UniversalManager
                     // configuring the new page by passing required information as a navigation
                     // parameter
                     NavigationService.Frame = rootFrame;
-                    NavigationHelper.Service.Navigate(Entities.Interfaces.NavigationTarget.Main, new MainViewModel());
+                    ServicesHelper.NavigationService.Navigate(Entities.Interfaces.NavigationTarget.Main, new MainViewModel());
 
                     //rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
@@ -124,7 +124,7 @@ namespace UniversalManager
             if(args is ToastNotificationActivatedEventArgs toastargs && int.TryParse(toastargs.Argument, out int todoID))
             {
                 TodoViewModel model = new TodoViewModel(TodoItemsManager.TodoItems.FirstOrDefault(t => t.ID == todoID));
-                NavigationHelper.Service.Navigate(Entities.Interfaces.NavigationTarget.TodoItems, model);
+                ServicesHelper.NavigationService.Navigate(Entities.Interfaces.NavigationTarget.TodoItems, model);
             }
             base.OnActivated(args);
         }

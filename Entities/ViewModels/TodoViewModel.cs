@@ -41,7 +41,7 @@ namespace Entities.ViewModels
             base.OnPropertyChanged(nameof(Count));
             SelectedTodo = neuesTodo;
 
-            NotificationHelper.Service?.CreateNotification(neuesTodo);
+            ServicesHelper.NotificationService.CreateNotification(neuesTodo);
         }
 
         public TodoViewModel()

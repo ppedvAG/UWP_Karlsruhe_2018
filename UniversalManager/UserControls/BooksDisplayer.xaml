@@ -6,6 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:entities="using:Entities.Models"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:media="using:Microsoft.Xaml.Interactions.Media"
     mc:Ignorable="d"
     x:Name="myControl"
     d:DesignHeight="300"
@@ -13,35 +16,69 @@
     d:DesignWidth="400">
     <UserControl.Resources>
         <DataTemplate x:DataType="entities:Book" x:Key="bookDetailTemplate">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                <StackPanel Orientation="Horizontal" >
-                    <Image Height="100" Stretch="Fill" Source="{x:Bind CoverURL,Mode=OneWay}" />
-                    <StackPanel>
-                        <TextBlock Text="{x:Bind Title,Mode=OneWay}">
-                            <!--<TextBlock.Triggers>
-                                <EventTrigger RoutedEvent="Holding">
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation
-                                                Storyboard.TargetName="textboxTitle"
-                                                Storyboard.TargetProperty="Height"
-                                                From="0" To="30" Duration="0:0:2"
+            <Border BorderBrush="Black" BorderThickness="3">
+                
+            <Grid x:Name="stackpanel" HorizontalAlignment="Stretch" Margin="2" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Image Width="150" Stretch="UniformToFill" Source="{x:Bind CoverURL,Mode=OneWay}"  />
+                <StackPanel Grid.Column="1" Margin="10 5 0 0">
+                    <TextBlock Text="{x:Bind Title,Mode=OneWay}" x:Name="textblockTitle" Margin="0 5 0 5">
+                        <TextBlock.RenderTransform>
+                            <ScaleTransform ScaleY="1" x:Name="textblockTitleScale" />
+                        </TextBlock.RenderTransform>
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="RightTapped">
+                                    <core:ChangePropertyAction TargetObject="{Binding ElementName=textblockTitle}" PropertyName="Visibility" Value="Collapsed" />
+                                    <core:ChangePropertyAction TargetObject="{Binding ElementName=textboxTitle}" PropertyName="Visibility" Value="Visible" />
+                                    <media:ControlStoryboardAction ControlStoryboardOption="Play">
+                                        <media:ControlStoryboardAction.Storyboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                Storyboard.TargetName="textboxScale"
+                                                Storyboard.TargetProperty="ScaleY"
+                                                To="1" Duration="0:0:0.500"
                                                 />
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </TextBlock.Triggers>-->
-                        </TextBlock>
-                        <!--<TextBox  x:Name="textboxTitle" Text="{x:Bind Title,Mode=TwoWay}" Height="0" />-->
-                        <TextBlock Text="{x:Bind Description,Mode=OneWay}" TextWrapping="Wrap"  />
-                        <ItemsControl ItemsSource="{x:Bind Authors}" />
-                        <!--Binding muss benutzt werden für ElementName. da x:Bind sich immer auf den lokalen Kontext (Page oder DataTemplate) bezieht-->
-                        <Button Command="{Binding ElementName=myControl,Path=ButtonCommand,Mode=OneWay}" 
+                                                 <DoubleAnimation 
+                                                Storyboard.TargetName="textblockTitleScale"
+                                                Storyboard.TargetProperty="ScaleY"
+                                                To="0" Duration="0:0:0.500"
+                                                />
+                                            </Storyboard>
+                                        </media:ControlStoryboardAction.Storyboard>
+                                    </media:ControlStoryboardAction>
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                    </TextBlock>
+                    <TextBox Visibility="Collapsed" x:Name="textboxTitle" Text="{x:Bind Title,Mode=TwoWay}" HorizontalAlignment="Left">
+                        <TextBox.RenderTransform>
+                            <ScaleTransform x:Name="textboxScale" ScaleY="0" />
+                        </TextBox.RenderTransform>
+                    </TextBox>
+
+                    <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Stretch" x:Name="border1" Margin="10">
+                        <interactivity:Interaction.Behaviors>
+                            <core:DataTriggerBehavior Binding="{x:Bind Description,Converter={StaticResource stringEmpty}}" Value="False">
+                                <core:ChangePropertyAction PropertyName="Opacity" Value="0" TargetObject="{Binding ElementName=border1}" />
+                            </core:DataTriggerBehavior>
+                        </interactivity:Interaction.Behaviors>
+                        
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="70" HorizontalAlignment="Stretch" Background="White">
+                            <TextBlock  Text="{x:Bind Description,Mode=OneWay}" TextWrapping="Wrap" TextAlignment="Left" />
+                        </ScrollViewer>
+                    </Border>
+
+                    <ItemsControl ItemsSource="{x:Bind Authors}" Margin="0 0 0 5" />
+                    <!--Binding muss benutzt werden für ElementName. da x:Bind sich immer auf den lokalen Kontext (Page oder DataTemplate) bezieht-->
+                    <Button Command="{Binding ElementName=myControl,Path=ButtonCommand,Mode=OneWay}" 
                                 CommandParameter="{x:Bind}"
                                 Content="{Binding ElementName=myControl,Path=ButtonContent,Mode=OneWay}" />
-                    </StackPanel>
                 </StackPanel>
-            </ScrollViewer>
+            </Grid>
+            </Border>
         </DataTemplate>
         <DataTemplate x:DataType="entities:Book" x:Key="bookShortTemplate">
             <StackPanel Orientation="Horizontal">
@@ -52,7 +89,12 @@
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
-    <ListBox x:Name="listbox" ItemsSource="{x:Bind Books,Mode=OneWay}" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource bookShortTemplate}">
+    <ListBox x:Name="listbox" ScrollViewer.VerticalScrollBarVisibility="Visible" ItemsSource="{x:Bind Books,Mode=OneWay}" ItemTemplate="{StaticResource bookShortTemplate}">
+        <ListBox.ItemContainerStyle>
+            <Style TargetType="ListBoxItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
+        </ListBox.ItemContainerStyle>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualStateGroup.States>
@@ -69,19 +111,27 @@
                         <!--}-->
                     </VisualState>
                     <VisualState>
-                        <!--if(MinWindowWith >= 200)-->
+                        <!--if(MinWindowWith >= 1300)-->
                         <VisualState.StateTriggers>
                             <!--Es können auch eigene Trigger-Klassen definiert werden-->
                             <AdaptiveTrigger MinWindowWidth="1300" />
                         </VisualState.StateTriggers>
                         <!--{-->
                         <VisualState.Setters>
-                            <Setter Target="listbox.Background" Value="Blue" />
+                            <Setter Target="listbox.ItemTemplate" Value="{StaticResource bookDetailTemplate}" />
+                            <Setter Target="listbox.Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush>
+                                        <GradientStop Color="White" Offset="0.3" />
+                                        <GradientStop Color="Blue" Offset="0.9" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
                         </VisualState.Setters>
                         <!--}-->
                     </VisualState>
                 </VisualStateGroup.States>
-            </VisualStateGroup>            
+            </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     </ListBox>
 </UserControl>

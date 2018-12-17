@@ -19,9 +19,9 @@ namespace Entities.ViewModels
         {
             GoToTodoItemsCommand = new DelegateCommand(p => GoToTodoItems());
             GoToBookSearchCommand = new DelegateCommand(p => GoToBookSearch());
-            SaveDataCommand = new DelegateCommand(p => DataHelper.Service?.SaveData(TodoItemsManager.TodoItems, TodoItem.Last_TODO_ID));
+            SaveDataCommand = new DelegateCommand(p => ServicesHelper.DataService?.SaveData(TodoItemsManager.TodoItems, TodoItem.Last_TODO_ID));
 
-            var data = DataHelper.Service?.LoadData();
+            var data = ServicesHelper.DataService?.LoadData();
             if(data != null)
             {
                 TodoItemsManager.TodoItems = data.Value.todoitems;
@@ -31,12 +31,12 @@ namespace Entities.ViewModels
 
         public void GoToTodoItems()
         {
-            NavigationHelper.Service.Navigate(Interfaces.NavigationTarget.TodoItems, new TodoViewModel());
+            ServicesHelper.NavigationService.Navigate(Interfaces.NavigationTarget.TodoItems, new TodoViewModel());
         }
 
         public void GoToBookSearch()
         {
-            NavigationHelper.Service.Navigate(Interfaces.NavigationTarget.BookSearch, new BookSearchViewModel());
+            ServicesHelper.NavigationService.Navigate(Interfaces.NavigationTarget.BookSearch, new BookSearchViewModel());
         }
     }
 }

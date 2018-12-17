@@ -6,20 +6,24 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:usercontrols="using:UniversalManager.UserControls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:media="using:Microsoft.Xaml.Interactions.Media"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
     <Pivot Background="Red" x:Name="pivot">
         <PivotItem Header="Suche">
             <StackPanel>
                 <TextBox Text="{x:Bind ViewModel.SearchTerm,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                <Button Command="{x:Bind ViewModel.SearchCommand,Mode=OneWay}">Suche</Button>
+                <Button Command="{x:Bind ViewModel.SearchCommand,Mode=OneWay}" Content="Suche" />
             </StackPanel>
         </PivotItem>
         <PivotItem Header="Ergebnis">
-            <usercontrols:BooksDisplayer Books="{x:Bind ViewModel.Books,Mode=OneWay}" 
+            <Grid>
+                <usercontrols:BooksDisplayer Books="{x:Bind ViewModel.Books,Mode=OneWay}" VerticalAlignment="Stretch"
                                          ButtonContent="Buch als Todo hinzufügen"
                                          ButtonCommand="{x:Bind ViewModel.BookSelectedCommand,Mode=OneWay}" />
+            </Grid>
         </PivotItem>
     </Pivot>
 </Page>

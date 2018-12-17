@@ -27,6 +27,8 @@ namespace AppServiceCaller
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            tbStatus.Items.Clear();
+
             using (var connection = new AppServiceConnection())
             {
                 connection.AppServiceName = "com.ppedv.todos";
@@ -37,7 +39,7 @@ namespace AppServiceCaller
                 switch (status)
                 {
                     case AppServiceConnectionStatus.Success:
-                        tbStatus.Items.Add("Verbindung hergestellt!");
+                        tbStatus.Items.Add("Verbindung zum Webservice hergestellt!");
                         break;
 
                     case AppServiceConnectionStatus.AppNotInstalled:
@@ -63,7 +65,7 @@ namespace AppServiceCaller
 
                 if (response.Status == AppServiceResponseStatus.Success)
                 {
-                    tbStatus.Items.Add("Hat geklappt!");
+                    tbStatus.Items.Add("Todo wurde durch App-Service erstellt!");
                     return;
                 }
 

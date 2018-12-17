@@ -78,7 +78,7 @@ namespace Entities.ViewModels
                 {
                     //TODO: ViewModel bauen
                     TodoViewModel model = new TodoViewModel(book);
-                    NavigationHelper.Service.Navigate(Interfaces.NavigationTarget.TodoItems, model);
+                    ServicesHelper.NavigationService.Navigate(Interfaces.NavigationTarget.TodoItems, model);
                 }
             });
         }
